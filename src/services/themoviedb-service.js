@@ -85,7 +85,7 @@ export default class ThemoviedbService {
     return {
       id: item.id,
       title: item.title,
-      overview: shortDescr(item.overview, 200),
+      overview: shortDescr(item.overview, 150),
       releaseDate: formatDate(item.release_date),
       posterPath: item.poster_path,
       genreIds: item.genre_ids,

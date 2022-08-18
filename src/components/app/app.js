@@ -67,6 +67,7 @@ export default class App extends Component {
       const key = await service.createGuestSession();
       localStorage.setItem('token', key.toString());
     }
+    this.getRatedMovies();
   };
 
   switchTab = async (e) => {
