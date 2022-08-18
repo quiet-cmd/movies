@@ -6,7 +6,7 @@ import './card-list.css';
 
 export default class CardList extends Component {
   render() {
-    const { movies, service } = this.props;
+    const { service, movies } = this.props;
     const moviesList = movies.map(({ id, ...props }) => {
       return <Card key={id} id={id} {...props} service={service} />;
     });

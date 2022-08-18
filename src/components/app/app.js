@@ -72,8 +72,26 @@ export default class App extends Component {
 
   switchTab = async (e) => {
     if (e === '2') return this.getRatedMovies();
-    const { searchMessage, currentPage } = this.state;
+    const { currentPage, searchMessage } = this.state;
     return this.getMovies(searchMessage, currentPage);
+  };
+
+  setRatingAll = async () => {
+    await this.getRatedMovies();
+    const { movies, ratedMovies } = this.state;
+    const NewMovies = [];
+    for (let movie of movies) {
+      let tmp = movie;
+      for (let { id, rating } of ratedMovies) {
+        if (id === tmp.id) movie.rating = rating;
+      }
+      NewMovies.push(tmp);
+    }
+    this.setState({ movies: NewMovies });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (JSON.stringify(prevState.movies) !== JSON.stringify(this.state.movies)) this.setRatingAll();
   };
 
   render() {

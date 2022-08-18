@@ -27,21 +27,13 @@ export default class Card extends Component {
     return { borderColor: color };
   };
 
-  getRating = async (movieId) => {
-    const { service } = this.props;
-    const { movies } = await service.getRatedMovies();
-    for (let movie of movies) {
-      if (movie.id === movieId) return movie.rating;
-    }
-  };
+  componentDidMount() {
+    this.setState({ rating: this.props.rating });
+  }
 
-  componentDidMount = async () => {
-    this.setState({ rating: await this.getRating(this.props.id) });
-  };
-
-  componentDidUpdate = async () => {
-    this.setState({ rating: await this.getRating(this.props.id) });
-  };
+  componentDidUpdate(prevState) {
+    if (prevState.rating !== this.props.rating) this.setState({ rating: this.props.rating });
+  }
 
   render() {
     const { posterPath, title, overview, releaseDate, genreIds, voteAverage } = this.props;
