@@ -25,7 +25,7 @@ export default class ThemoviedbService {
 
   async getMovies(query, page) {
     const url = `${this._apiBase}/search/movie${this._apiKey}&query=${query}&page=${page}&include_adult=false&language=en-US`;
-    if (query.trim() === '') return { results: [] };
+    if (query.trim() === '') return { movies: [], totalPages: 0 };
     const { results, total_pages } = await this.getResource(url);
     return { movies: results.map(this._transformMovies), totalPages: total_pages };
   }
@@ -90,6 +90,7 @@ export default class ThemoviedbService {
       posterPath: item.poster_path,
       genreIds: item.genre_ids,
       voteAverage: item.vote_average.toFixed(1),
+      rating: item.rating || 0,
     };
   }
 }

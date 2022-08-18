@@ -4,13 +4,13 @@ import { Tag, Rate } from 'antd';
 import './card.css';
 import { GenresConsumer } from '../context';
 
-import defaultIUmg from './404.png';
+import defaultImg from './404.png';
 
 export default class Card extends Component {
   updateRating = (e) => {
     const service = this.props.service;
     if (e === 0) return service.deleteRating(this.props.id);
-    return service.setRating(this.props.id, e);
+    service.setRating(this.props.id, e);
   };
 
   rateColor = (rate) => {
@@ -23,7 +23,7 @@ export default class Card extends Component {
   };
 
   render() {
-    const { posterPath, title, overview, releaseDate, genreIds, voteAverage } = this.props;
+    const { posterPath, title, overview, releaseDate, genreIds, voteAverage, rating } = this.props;
 
     const genres = genreIds.map((el) => {
       return <GenresConsumer key={el}>{(genres) => <Tag>{genres[el]}</Tag>}</GenresConsumer>;
@@ -32,7 +32,7 @@ export default class Card extends Component {
     return (
       <div className="card">
         <aside className="card__img">
-          <img src={posterPath ? `https://image.tmdb.org/t/p/original/${posterPath}` : defaultIUmg} alt="" />
+          <img src={posterPath ? `https://image.tmdb.org/t/p/original/${posterPath}` : defaultImg} alt="" />
         </aside>
         <div className="card__info">
           <h2 className="card__title">{title}</h2>
@@ -42,7 +42,7 @@ export default class Card extends Component {
           <p className="card__date">{releaseDate}</p>
           <div className="card__genres genres">{genres}</div>
           <p className="card__description">{overview}</p>
-          <Rate count={10} onChange={this.updateRating} />
+          <Rate count={10} onChange={this.updateRating} defaultValue={rating} />
         </div>
       </div>
     );

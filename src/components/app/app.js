@@ -15,7 +15,7 @@ import './app.css';
 export default class App extends Component {
   state = {
     movies: [],
-    rateMovies: [],
+    ratedMovies: [],
     currentPage: 1,
     totalPages: 0,
     searchMessage: '',
@@ -27,7 +27,7 @@ export default class App extends Component {
   };
   service = new ThemoviedbService();
 
-  getMovies = async (text, pages = 1) => {
+  getMovies = async (text = '', pages = 1) => {
     this.setState({ loading: true });
     try {
       const service = this.service;
@@ -43,6 +43,13 @@ export default class App extends Component {
       this.setState({ isError: true, errorMessage: 'The request failed' });
     }
     this.setState({ loading: false });
+  };
+
+  getRatedMovies = async () => {
+    const service = this.service;
+    this.setState({ loading: true });
+    const { movies } = await service.getRatedMovies();
+    this.setState({ ratedMovies: movies, loading: false });
   };
 
   switchPage = (e) => {
@@ -63,16 +70,13 @@ export default class App extends Component {
   };
 
   switchTab = async (e) => {
-    const service = this.service;
-    if (e === '2') {
-      this.setState({ loading: true });
-      const { movies } = await service.getRatedMovies();
-      this.setState({ rateMovies: movies, loading: false });
-    }
+    if (e === '2') return this.getRatedMovies();
+    const { searchMessage, currentPage } = this.state;
+    return this.getMovies(searchMessage, currentPage);
   };
 
   render() {
-    const { genres, movies, rateMovies, loading, isError, errorMessage, notFound, totalPages, currentPage } =
+    const { genres, movies, ratedMovies, loading, isError, errorMessage, notFound, totalPages, currentPage } =
       this.state;
     return (
       <GenresProvider value={genres}>
@@ -92,8 +96,8 @@ export default class App extends Component {
               </Tabs.TabPane>
               <Tabs.TabPane tab="Rated" key="2">
                 {loading && <Spin size="large" />}
-                {!rateMovies.length && <Empty />}
-                <CardList movies={rateMovies} service={this.service} />
+                {!ratedMovies.length && <Empty />}
+                <CardList movies={ratedMovies} service={this.service} />
               </Tabs.TabPane>
             </Tabs>
           </Online>
