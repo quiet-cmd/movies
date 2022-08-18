@@ -7,10 +7,6 @@ import { GenresConsumer } from '../context';
 import defaultImg from './404.png';
 
 export default class Card extends Component {
-  state = {
-    rating: 0,
-  };
-
   updateRating = (e) => {
     const { service } = this.props;
     if (e === 0) return service.deleteRating(this.props.id);
