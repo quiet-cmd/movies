@@ -90,8 +90,8 @@ export default class App extends Component {
     this.setState({ movies: NewMovies });
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (JSON.stringify(prevState.movies) !== JSON.stringify(this.state.movies)) this.setRatingAll();
+  componentDidUpdate = async (prevProps, prevState) => {
+    if (JSON.stringify(prevState.movies) !== JSON.stringify(this.state.movies)) await this.setRatingAll();
   };
 
   render() {
