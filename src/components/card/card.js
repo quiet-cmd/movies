@@ -7,10 +7,14 @@ import { GenresConsumer } from '../context';
 import defaultImg from './404.png';
 
 export default class Card extends Component {
-  updateRating = (e) => {
+  state = {
+    rating: 0,
+  };
+
+  updateRating = async (e) => {
     const { service } = this.props;
     if (e === 0) return service.deleteRating(this.props.id);
-    service.setRating(this.props.id, e);
+    await service.setRating(this.props.id, e);
     this.setState({ rating: e });
   };
 
@@ -23,8 +27,24 @@ export default class Card extends Component {
     return { borderColor: color };
   };
 
+  getRating = async (movieId) => {
+    const { service } = this.props;
+    const { movies } = await service.getRatedMovies();
+    for (let movie of movies) {
+      if (movie.id === movieId) return movie.rating;
+    }
+  };
+
+  componentDidMount = async () => {
+    this.setState({ rating: await this.getRating(this.props.id) });
+  };
+
+  componentDidUpdate = async () => {
+    this.setState({ rating: await this.getRating(this.props.id) });
+  };
+
   render() {
-    const { posterPath, title, overview, releaseDate, genreIds, voteAverage, rating } = this.props;
+    const { posterPath, title, overview, releaseDate, genreIds, voteAverage } = this.props;
     const genres = genreIds.map((el) => {
       return <GenresConsumer key={el}>{(genres) => <Tag>{genres[el]}</Tag>}</GenresConsumer>;
     });
@@ -42,7 +62,7 @@ export default class Card extends Component {
           <p className="card__date">{releaseDate}</p>
           <div className="card__genres genres">{genres}</div>
           <p className="card__description">{overview}</p>
-          <Rate count={10} onChange={this.updateRating} value={rating} />
+          <Rate count={10} onChange={this.updateRating} value={this.state.rating} />
         </div>
       </div>
     );
