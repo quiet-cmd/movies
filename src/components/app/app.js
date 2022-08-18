@@ -65,8 +65,9 @@ export default class App extends Component {
   switchTab = async (e) => {
     const service = this.service;
     if (e === '2') {
+      this.setState({ loading: true });
       const { movies } = await service.getRatedMovies();
-      this.setState({ rateMovies: movies });
+      this.setState({ rateMovies: movies, loading: false });
     }
   };
 
@@ -90,6 +91,7 @@ export default class App extends Component {
                 {!!totalPages && <Pagination current={currentPage} total={totalPages} onChange={this.switchPage} />}
               </Tabs.TabPane>
               <Tabs.TabPane tab="Rated" key="2">
+                {loading && <Spin size="large" />}
                 {!rateMovies.length && <Empty />}
                 <CardList movies={rateMovies} service={this.service} />
               </Tabs.TabPane>
