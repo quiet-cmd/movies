@@ -1,0 +1,15 @@
+.container {
+  margin: 0px auto;
+  max-width: 1010px;
+  padding: 0px 16px 30px 16px;
+}
+
+.ant-spin {
+  display: block;
+  margin: 20px auto 20px auto;
+}
+
+.ant-pagination {
+  display: flex;
+  justify-content: center;
+}
