@@ -13,3 +13,8 @@
   display: flex;
   justify-content: center;
 }
+
+.ant-tabs-nav-list {
+  margin-left: auto;
+  margin-right: auto;
+}

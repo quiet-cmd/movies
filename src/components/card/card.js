@@ -37,6 +37,7 @@ export default class Card extends Component {
 
   render() {
     const { posterPath, title, overview, releaseDate, genreIds, voteAverage } = this.props;
+
     const genres = genreIds.map((el) => {
       return <GenresConsumer key={el}>{(genres) => <Tag>{genres[el]}</Tag>}</GenresConsumer>;
     });

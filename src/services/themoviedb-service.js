@@ -19,8 +19,10 @@ export default class ThemoviedbService {
 
   async createGuestSession() {
     const url = `${this._apiBase}/authentication/guest_session/new${this._apiKey}`;
-    const res = await this.getResource(url);
-    return res.guest_session_id;
+    if (this.guestToken === null) {
+      const key = await this.getResource(url);
+      localStorage.setItem('token', key.guest_session_id.toString());
+    }
   }
 
   async getMovies(query, page) {

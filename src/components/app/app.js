@@ -62,11 +62,9 @@ export default class App extends Component {
 
   componentDidMount = async () => {
     const service = this.service;
-    this.setState({ genres: await service.getGenres() });
-    if (localStorage.getItem('token') === null) {
-      const key = await service.createGuestSession();
-      localStorage.setItem('token', key.toString());
-    }
+    await service.createGuestSession();
+    const genres = await service.getGenres();
+    this.setState({ genres: genres });
     this.getRatedMovies();
   };
 
@@ -92,6 +90,7 @@ export default class App extends Component {
 
   componentDidUpdate = async (prevProps, prevState) => {
     if (JSON.stringify(prevState.movies) !== JSON.stringify(this.state.movies)) await this.setRatingAll();
+    if (JSON.stringify(prevState.ratedMovies) !== JSON.stringify(this.state.ratedMovies)) await this.setRatingAll();
   };
 
   render() {
