@@ -35,6 +35,7 @@ export default class ThemoviedbService {
   async getRatedMovies() {
     const url = `${this._apiBase}/guest_session/${this.guestToken}/rated/movies${this._apiKey}`;
     const { results } = await this.getResource(url);
+    if (!results) return { movies: [] };
     return { movies: results.map(this._transformMovies) };
   }
 
