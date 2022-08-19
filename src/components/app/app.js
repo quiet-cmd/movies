@@ -27,56 +27,42 @@ export default class App extends Component {
   };
   service = new ThemoviedbService();
 
-  getMovies = async (text = '', pages = 1) => {
-    this.setState({ loading: true });
+  getMovies = async () => {
     try {
-      const service = this.service;
-      const { movies, totalPages } = await service.getMovies(text, pages);
-      this.setState({
-        movies: movies,
-        notFound: movies.length === 0,
-        isError: false,
-        totalPages: totalPages,
-        searchMessage: text,
-      });
+      const { currentPage, searchMessage } = this.state;
+      const { movies, totalPages } = await this.service.getMovies(searchMessage, currentPage);
+      this.setState({ movies: movies, notFound: !movies.length, isError: false, totalPages: totalPages });
     } catch (e) {
       this.setState({ isError: true, errorMessage: 'The request failed' });
     }
-    this.setState({ loading: false });
   };
 
   getRatedMovies = async () => {
-    const service = this.service;
-    this.setState({ loading: true });
-    const { movies } = await service.getRatedMovies();
-    this.setState({ ratedMovies: movies, loading: false });
+    const { movies } = await this.service.getRatedMovies();
+    this.setState({ ratedMovies: movies });
   };
 
   switchPage = (e) => {
     this.setState({ currentPage: e });
-    this.getMovies(this.state.searchMessage, e);
     window.scrollTo(0, 0);
   };
 
-  searchMovies = debounce((text) => this.getMovies(text), 1000);
+  searchMovies = debounce((text) => this.setState({ searchMessage: text, currentPage: 1 }), 1000);
 
   componentDidMount = async () => {
     const service = this.service;
     await service.createGuestSession();
-    const genres = await service.getGenres();
-    this.setState({ genres: genres });
+    this.setState({ genres: await service.getGenres() });
     await this.getRatedMovies();
+    await this.getMovies();
   };
 
   switchTab = async (e) => {
-    if (e === '2') return this.getRatedMovies();
-    const { currentPage, searchMessage } = this.state;
-    return this.getMovies(searchMessage, currentPage);
+    e === '2' ? this.getRatedMovies() : this.getMovies();
   };
 
   setRatingAll = async () => {
-    const { searchMessage, currentPage } = this.state;
-    await this.getMovies(searchMessage, currentPage);
+    await this.getMovies();
     this.setState({ loading: true });
     await this.getRatedMovies();
     const { movies, ratedMovies } = this.state;
@@ -93,8 +79,11 @@ export default class App extends Component {
   };
 
   componentDidUpdate = async (prevProps, prevState) => {
-    if (JSON.stringify(prevState.movies) !== JSON.stringify(this.state.movies)) await this.setRatingAll();
-    if (JSON.stringify(prevState.ratedMovies) !== JSON.stringify(this.state.ratedMovies)) await this.setRatingAll();
+    console.log('update');
+    const { currentPage, searchMessage, movies, ratedMovies } = this.state;
+    if (prevState.currentPage !== currentPage || prevState.searchMessage !== searchMessage) this.getMovies();
+    else if (JSON.stringify(prevState.movies) !== JSON.stringify(movies)) await this.setRatingAll();
+    else if (JSON.stringify(prevState.ratedMovies) !== JSON.stringify(ratedMovies)) await this.setRatingAll();
   };
 
   render() {
