@@ -65,7 +65,7 @@ export default class App extends Component {
     await service.createGuestSession();
     const genres = await service.getGenres();
     this.setState({ genres: genres });
-    this.getRatedMovies();
+    await this.getRatedMovies();
   };
 
   switchTab = async (e) => {
@@ -75,18 +75,20 @@ export default class App extends Component {
   };
 
   setRatingAll = async () => {
+    this.setState({ loading: true });
     await this.getRatedMovies();
+    await this.getMovies(this.state.searchMessage, this.state.currentPage);
     const { movies, ratedMovies } = this.state;
     const NewMovies = [];
     for (let movie of movies) {
       let tmp = movie;
       for (let { id, rating } of ratedMovies) {
         if (id === tmp.id) movie.rating = rating;
-        else movie.rating = 0;
       }
       NewMovies.push(tmp);
     }
     this.setState({ movies: NewMovies });
+    this.setState({ loading: false });
   };
 
   componentDidUpdate = async (prevProps, prevState) => {
