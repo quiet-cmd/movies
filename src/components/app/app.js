@@ -75,9 +75,10 @@ export default class App extends Component {
   };
 
   setRatingAll = async () => {
+    const { searchMessage, currentPage } = this.state;
+    await this.getMovies(searchMessage, currentPage);
     this.setState({ loading: true });
     await this.getRatedMovies();
-    await this.getMovies(this.state.searchMessage, this.state.currentPage);
     const { movies, ratedMovies } = this.state;
     const NewMovies = [];
     for (let movie of movies) {
