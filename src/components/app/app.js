@@ -82,6 +82,7 @@ export default class App extends Component {
       let tmp = movie;
       for (let { id, rating } of ratedMovies) {
         if (id === tmp.id) movie.rating = rating;
+        else movie.rating = 0;
       }
       NewMovies.push(tmp);
     }

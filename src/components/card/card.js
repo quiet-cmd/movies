@@ -12,12 +12,13 @@ export default class Card extends Component {
   };
 
   updateRating = async (e) => {
-    const { service } = this.props;
+    const { service, id } = this.props;
     if (e === 0) {
       this.setState({ rating: e });
-      return await service.deleteRating(this.props.id);
+      await service.deleteRating(id);
+      return;
     }
-    await service.setRating(this.props.id, e);
+    await service.setRating(id, e);
     this.setState({ rating: e });
   };
 
