@@ -79,7 +79,6 @@ export default class App extends Component {
   };
 
   componentDidUpdate = async (prevProps, prevState) => {
-    console.log('update');
     const { currentPage, searchMessage, movies, ratedMovies } = this.state;
     if (prevState.currentPage !== currentPage || prevState.searchMessage !== searchMessage) this.getMovies();
     else if (JSON.stringify(prevState.movies) !== JSON.stringify(movies)) await this.setRatingAll();
