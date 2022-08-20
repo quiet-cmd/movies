@@ -22,13 +22,11 @@ export default class Card extends Component {
     this.setState({ rating: e });
   };
 
-  rateColor = (rate) => {
-    let color = '#E90000';
-    if (rate < 3) color = '#E90000';
-    else if (rate < 5) color = '#E97E00';
-    else if (rate <= 7) color = '#E9D100';
-    else if (rate > 7) color = '#66E900';
-    return { borderColor: color };
+  setRatingColor = (rate) => {
+    if (rate < 3) return '#E90000';
+    if (rate < 5) return '#E97E00';
+    if (rate <= 7) return '#E9D100';
+    if (rate > 7) return '#66E900';
   };
 
   componentDidMount() {
@@ -48,12 +46,12 @@ export default class Card extends Component {
 
     return (
       <div className="card">
-        <aside className="card__img">
+        <div className="card__img">
           <img src={posterPath ? `https://image.tmdb.org/t/p/original/${posterPath}` : defaultImg} alt="" />
-        </aside>
+        </div>
         <div className="card__info">
           <h2 className="card__title">{title}</h2>
-          <div className="card__rate" style={this.rateColor(voteAverage)}>
+          <div className="card__rate" style={{ borderColor: this.setRatingColor(voteAverage) }}>
             {voteAverage}
           </div>
           <p className="card__date">{releaseDate}</p>

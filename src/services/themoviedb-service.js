@@ -80,9 +80,9 @@ export default class ThemoviedbService {
     };
     const shortDescr = (str, len) => {
       if (str.length <= len) return str;
-      let newStr = str.substring(0, len);
-      let first = newStr.slice(0, newStr.lastIndexOf('.')) + '...';
-      let second = newStr.slice(0, newStr.lastIndexOf(' ')) + '...';
+      const newStr = str.substring(0, len);
+      const first = newStr.slice(0, newStr.lastIndexOf('.')) + '...';
+      const second = newStr.slice(0, newStr.lastIndexOf(' ')) + '...';
       return second.length > first.length ? second : first;
     };
     return {
