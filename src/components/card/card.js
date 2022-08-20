@@ -51,7 +51,7 @@ export default class Card extends Component {
         </div>
         <div className="card__info">
           <h2 className="card__title">{title}</h2>
-          <div className="card__rate" style={{ borderColor: this.setRatingColor(voteAverage) }}>
+          <div className="card__rate" style={{ borderColor: this.getRateColor(voteAverage) }}>
             {voteAverage}
           </div>
           <p className="card__date">{releaseDate}</p>
