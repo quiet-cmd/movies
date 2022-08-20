@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import { Tag, Rate } from 'antd';
 
 import './card.css';
@@ -22,13 +23,6 @@ export default class Card extends Component {
     this.setState({ rating: e });
   };
 
-  getRateColor = (rate) => {
-    if (rate < 3) return '#E90000';
-    if (rate < 5) return '#E97E00';
-    if (rate <= 7) return '#E9D100';
-    if (rate > 7) return '#66E900';
-  };
-
   componentDidMount() {
     this.setState({ rating: this.props.rating });
   }
@@ -44,6 +38,14 @@ export default class Card extends Component {
       return <GenresConsumer key={el}>{(genres) => <Tag>{genres[el]}</Tag>}</GenresConsumer>;
     });
 
+    const cardRateClass = classNames({
+      card__rate: true,
+      '_sad-rating': voteAverage < 3,
+      '_normal-rating': voteAverage < 5,
+      '_good-rating': voteAverage <= 7,
+      '_best-rating': voteAverage > 7,
+    });
+
     return (
       <div className="card">
         <div className="card__img">
@@ -51,9 +53,7 @@ export default class Card extends Component {
         </div>
         <div className="card__info">
           <h2 className="card__title">{title}</h2>
-          <div className="card__rate" style={{ borderColor: this.getRateColor(voteAverage) }}>
-            {voteAverage}
-          </div>
+          <div className={cardRateClass}>{voteAverage}</div>
           <p className="card__date">{releaseDate}</p>
           <div className="card__genres genres">{genres}</div>
           <p className="card__description">{overview}</p>

@@ -54,6 +54,22 @@
   right: 10px;
 }
 
+._sad-rating {
+  border-color: #e90000;
+}
+
+._normal-rating {
+  border-color: #e97e00;
+}
+
+._good-rating {
+  border-color: #e9d100;
+}
+
+._best-rating {
+  border-color: #66e900;
+}
+
 .card__date {
   font-family: 'Inter';
   font-style: normal;
